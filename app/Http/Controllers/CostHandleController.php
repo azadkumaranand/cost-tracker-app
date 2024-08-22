@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Investment;
+use Carbon\Carbon;
 
 class CostHandleController extends Controller
 {
@@ -19,6 +20,23 @@ class CostHandleController extends Controller
         ]);
         return redirect()->back()->with('success', 'Investment Created!');
 
+    }
+    public function index(){
+        $investment = Investment::all();
+
+        $currentdate = Carbon::now();
+        $currentdate = Carbon::parse($currentdate)->format('d/m/Y');
+        $currentmonth = explode('/', $currentdate)[1];
+        
+        $investment = $investment->filter(function ($item, $key) use($currentmonth) {
+            $date = explode('/', Carbon::parse($item->created_at)->format('d/m/Y'))[1];
+            return $currentmonth == $date;
+        });
+        $toalamount = 0;
+        foreach ($investment as $key => $value) {
+            $toalamount += $value->cost;
+        }
+        return view('index', ['investments'=>$investment, 'toalamount'=>$toalamount]);
     }
     public function edit(){
 

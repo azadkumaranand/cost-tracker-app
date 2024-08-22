@@ -44,9 +44,9 @@
             </div>
         </form>
         <div class="investments my-3">
-          <h5 class="mb-2">This month investment</h5>
+          <h5 class="my-4">You have invested {{$toalamount}}, in this month</h5>
             @foreach ($investments as $investment)
-                <div class="card">
+                <div class="card mb-3">
                   <div>
                     <span class="badge text-bg-success">{{\Carbon\Carbon::parse($investment->created_at)->format('d/m/Y');}}</span>
                   </div>

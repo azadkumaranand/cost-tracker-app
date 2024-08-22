@@ -3,10 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CostHandleController;
 use App\Models\Investment;
+use Carbon\Carbon;
 
-Route::get('/', function () {
-    $investment = Investment::all();
-    return view('index', ['investments'=>$investment]);
-});
+Route::get('/', [CostHandleController::class, 'index']);
 
 Route::post('/about', [CostHandleController::class, 'storeData'])->name('about');
