@@ -38,8 +38,16 @@ class CostHandleController extends Controller
         }
         return view('index', ['investments'=>$investment, 'toalamount'=>$toalamount]);
     }
-    public function edit(){
 
+    public function edit(Request $request){
+        $id = $request->query('id');
+        $liablity = $request->query('liablity');
+        $cost = $request->query('cost');
+        $investment = Investment::find($id);
+        $investment->liablity = $liablity;
+        $investment->cost = $cost;
+        $investment->save();
+        return redirect()->back()->with('success', 'Updated Successfully!');
     }
     public function update(){
 
