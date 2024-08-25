@@ -39,6 +39,7 @@ class CostHandleController extends Controller
         return view('index', ['investments'=>$investment, 'toalamount'=>$toalamount]);
     }
 
+
     public function edit(Request $request){
         $id = $request->query('id');
         $liablity = $request->query('liablity');
@@ -49,8 +50,15 @@ class CostHandleController extends Controller
         $investment->save();
         return redirect()->back()->with('success', 'Updated Successfully!');
     }
-    public function update(){
 
+    public function delete(Request $request){
+        $request->validate([
+            'id'=>'required',
+        ]);
+        $id = $request->id;
+        $investment = Investment::find($id);
+        $investment->delete();
+        return redirect()->back()->with('success', 'Deleted Successfully!');
     }
 }
 
