@@ -41,9 +41,13 @@ class CostHandleController extends Controller
 
 
     public function edit(Request $request){
-        $id = $request->query('id');
-        $liablity = $request->query('liablity');
-        $cost = $request->query('cost');
+        // $id = $request->query('id');
+        // $liablity = $request->query('liablity');
+        // $cost = $request->query('cost');
+        $id = $request->id;
+        $liablity = $request->liablity;
+        $cost = $request->cost;
+        
         $investment = Investment::find($id);
         $investment->liablity = $liablity;
         $investment->cost = $cost;

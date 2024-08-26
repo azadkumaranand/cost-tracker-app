@@ -50,23 +50,27 @@
                   <div>
                     <span class="badge text-bg-success">{{\Carbon\Carbon::parse($investment->created_at)->format('d/m/Y');}}</span>
                   </div>
+                  <form action="{{route('edit')}}" method="post" id="update-form-{{$investment->id}}">
                     <div class="row p-3">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="liablity" class="form-label">Liability</label>
-                                <input type="text" class="form-control liability-input-{{$investment->id}}" id="liablity" name="liablity" value="{{$investment->liablity}}" disabled>
+                            @csrf
+                            <div class="col-md-6">
+                                <input type="hidden" name="id" value="{{$investment->id}}">
+                                <div class="mb-3">
+                                    <label for="liablity" class="form-label">Liability</label>
+                                    <input type="text" class="form-control liability-input-{{$investment->id}}" id="liablity" name="liablity" value="{{$investment->liablity}}" disabled>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="cost" class="form-label">Cost</label>
+                                    <input type="number" class="form-control cost-input-{{$investment->id}}" id="cost" name="cost" value="{{$investment->cost}}" disabled>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="cost" class="form-label">Cost</label>
-                                <input type="number" class="form-control cost-input-{{$investment->id}}" id="cost" name="cost" value="{{$investment->cost}}" disabled>
-                            </div>
-                        </div>
-                        <div class="button-group">
-                            <button class="btn btn-warning edit" data-id="{{$investment->id}}">Edit</button>
-                            <button type="button" class="btn btn-danger delete-modal" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{$investment->id}}">Delete</button>
-                        </div>
+                    </form>
+                    <div class="button-group">
+                        <button class="btn btn-warning edit" data-id="{{$investment->id}}">Edit</button>
+                        <button type="button" class="btn btn-danger delete-modal" data-bs-toggle="modal" data-bs-target="#exampleModal" data-id="{{$investment->id}}">Delete</button>
                     </div>
                 </div>
             @endforeach
@@ -110,11 +114,13 @@
                 const id = btns.getAttribute('data-id');
                 let liability_input = document.querySelector(`.liability-input-${id}`);
                 let cost_input = document.querySelector(`.cost-input-${id}`);
+                let form = document.querySelector(`#update-form-${id}`);
                 console.log(cost_input.disabled);
                 if(cost_input.disabled == false){
+                    form.submit();
                     // alert("{{route('edit')}}?id="+id+"&liablity="+liability_input.value+"&cost="+cost_input.value);
-                    window.location.href = "{{route('edit')}}?id="+id+"&liablity="+liability_input.value+"&cost="+cost_input.value;
-                }http://127.0.0.1:8000/edit?id=2&liablity=abanana&cost=100
+                    // window.location.href = "{{route('edit')}}?id="+id+"&liablity="+liability_input.value+"&cost="+cost_input.value;
+                }
                 liability_input.disabled = false;
                 cost_input.disabled = false;
                 btns.innerText = 'Update';
