@@ -9,5 +9,9 @@ class Investment extends Model
 {
     use HasFactory;
     
-    protected $fillable = ['liablity', 'cost'];
+    protected $fillable = ['user_id', 'liablity', 'cost'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

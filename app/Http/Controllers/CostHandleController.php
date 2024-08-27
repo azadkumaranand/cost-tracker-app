@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Investment;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class CostHandleController extends Controller
 {
@@ -15,14 +17,18 @@ class CostHandleController extends Controller
         ]);
 
         Investment::create([
+            'user_id'=>Auth::user()->id,
             'liablity'=>$request->liablity,
-            'cost'=>$request->cost,
+            'cost'=>$request->cost
         ]);
         return redirect()->back()->with('success', 'Investment Created!');
 
     }
     public function index(){
-        $investment = Investment::all();
+        $userId = Auth::user()->id;
+        $investment = Investment::where('user_id', $userId)->get();
+
+        // return $investment;
 
         $currentdate = Carbon::now();
         $currentdate = Carbon::parse($currentdate)->format('d/m/Y');
