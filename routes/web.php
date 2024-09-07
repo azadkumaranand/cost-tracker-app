@@ -15,7 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/', [CostHandleController::class, 'index']);
+    Route::any('/', [CostHandleController::class, 'index'])->name('index');
 
     Route::post('/about', [CostHandleController::class, 'storeData'])->name('about');
     Route::post('/edit', [CostHandleController::class, 'edit'])->name('edit');

@@ -24,20 +24,25 @@ class CostHandleController extends Controller
         return redirect()->back()->with('success', 'Investment Created!');
 
     }
-    public function index(){
+    public function index(Request $request){
         $userId = Auth::user()->id;
+        if($request->has('date')){
+            $currentdate = $request->date;
+            $date = explode('/', $request->date);
+            $datesting = $date[2].$date[1];
+            // return $date;
+        }else{
+            $currentdate = Carbon::now();
+            $date = explode('-', Carbon::parse($currentdate)->format('Y-m-d'));
+            $datesting = $date[0].$date[1];
+        }
+
+        // return $date;
         $investment = Investment::where('user_id', $userId)->get();
-
-        // return $investment;
-
-        $currentdate = Carbon::now();
-        $currentdate = Carbon::parse($currentdate)->format('d/m/Y');
-        $currentmonth = explode('/', $currentdate)[1];
-        
-        $investment = $investment->filter(function ($item, $key) use($currentmonth) {
-            $date = explode('/', Carbon::parse($item->created_at)->format('d/m/Y'))[1];
-            return $currentmonth == $date;
+        $investment = $investment->filter(function ($item, $key) use($datesting) {
+            return $item->created_at == $datesting;
         });
+
         $toalamount = 0;
         foreach ($investment as $key => $value) {
             $toalamount += $value->cost;
