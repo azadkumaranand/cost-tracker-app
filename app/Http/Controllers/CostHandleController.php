@@ -26,16 +26,17 @@ class CostHandleController extends Controller
     }
     public function index(Request $request){
         $userId = Auth::user()->id;
-        if($request->has('date')){
-            $currentdate = $request->date;
-            $date = explode('/', $request->date);
-            $datesting = $date[2].$date[1];
-            // return $date;
+        $selectedate = '14/11/2024';
+        if($request->query('date')){
+            $date = explode('/', $request->query('date'));
+            $currentdate = $date[2].'-'.$date[1].'-'.$date[0];
+            $selectedate = $request->query('date');
         }else{
             $currentdate = Carbon::now();
-            $date = explode('-', Carbon::parse($currentdate)->format('Y-m-d'));
-            $datesting = $date[0].$date[1];
         }
+        // return $selectedate;
+        $date = explode('-', Carbon::parse($currentdate)->format('Y-m-d'));
+        $datesting = $date[0].$date[1];
 
         // return $date;
         $investment = Investment::where('user_id', $userId)->get();
@@ -47,7 +48,7 @@ class CostHandleController extends Controller
         foreach ($investment as $key => $value) {
             $toalamount += $value->cost;
         }
-        return view('index', ['investments'=>$investment, 'toalamount'=>$toalamount]);
+        return view('index', ['investments'=>$investment, 'toalamount'=>$toalamount, 'selectedate'=>$selectedate]);
     }
 
 
@@ -75,5 +76,27 @@ class CostHandleController extends Controller
         $investment->delete();
         return redirect()->back()->with('success', 'Deleted Successfully!');
     }
+
+    // public function filterbydate(Request $request){
+    //     $userId = Auth::user()->id;
+    //     $currentdate = $request->query('date');
+    //     return $request;
+    //     $date = explode('/', $request->date);
+    //     $datesting = $date[2].$date[1];
+
+    //     $investment = Investment::where('user_id', $userId)->get();
+    //     $investment = $investment->filter(function ($item, $key) use($datesting) {
+    //         return $item->created_at == $datesting;
+    //     });
+    //     // return response()->json([
+    //     //     'investments'=>$investment,
+    //     //     'date'=>$request->date
+    //     // ]);
+    //     $toalamount = 0;
+    //     foreach ($investment as $key => $value) {
+    //         $toalamount += $value->cost;
+    //     }
+    //     return view('index', ['investments'=>$investment, 'toalamount'=>$toalamount, 'selecteddate'=>$currentdate]);
+    // }
 }
 
